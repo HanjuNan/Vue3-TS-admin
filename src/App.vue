@@ -7,6 +7,7 @@ for (let i = 0; i < 100; i++) {
 <template>
   <div>
     <h1>Hello Vue3</h1>
+    <h1>新增一个h1标题</h1>
   </div>
 </template>
 

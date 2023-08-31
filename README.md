@@ -66,3 +66,48 @@ pnpm install -D husky
 
 1.2 执行
 npx husky-init
+
+配置commitlint
+对于我们的commit信息，也是有统一规范的，不能随便写,要让每个人都按照统一的标准来执行，我们可以利用**commitlint**来实现。
+1.1 安装
+pnpm add @commitlint/config-conventional @commitlint/cli -D
+
+1.2 配置
+添加配置文件，新建`commitlint.config.cjs`(注意是cjs)，然后添加下面的代码：
+
+1.3 在package.json中配置script命令
+配置结束，现在当我们填写`commit`信息的时候，前面就需要带着下面的`subject`
+'feat',//新特性、新功能
+'fix',//修改bug
+'docs',//文档修改
+'style',//代码格式修改, 注意不是 css 修改
+'refactor',//代码重构
+'perf',//优化相关，比如提升性能、体验
+'test',//测试用例修改
+'chore',//其他修改, 比如改变构建流程、或者增加依赖库、工具等
+'revert',//回滚到上一个版本
+'build',//编译相关的修改，例如发布版本、对项目构建或者依赖的改动
+
+1.4 配置husky
+npx husky add .husky/commit-msg 
+
+当我们 commit 提交信息时，就不能再随意写了，必须是 git commit -m 'fix: xxx' 
+符合类型的才可以，**需要注意的是类型的后面需要用英文的 :，并且冒号后面是需要空一格的，
+这个是不能省略的**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
