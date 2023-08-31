@@ -1,5 +1,7 @@
 # Veu3 + TS后台项目
+
 ## 项目初始化
+
 全局安装pnpm
 npm i -g pnpm
 
@@ -64,31 +66,3 @@ pnpm install -D husky
 
 1.2 执行
 npx husky-init
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
