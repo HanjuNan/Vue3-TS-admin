@@ -89,12 +89,72 @@ pnpm add @commitlint/config-conventional @commitlint/cli -D
 'build',//编译相关的修改，例如发布版本、对项目构建或者依赖的改动
 
 1.4 配置husky
-npx husky add .husky/commit-msg 
+npx husky add .husky/commit-msg
 
-当我们 commit 提交信息时，就不能再随意写了，必须是 git commit -m 'fix: xxx' 
+当我们 commit 提交信息时，就不能再随意写了，必须是 git commit -m 'fix: xxx'
 符合类型的才可以，**需要注意的是类型的后面需要用英文的 :，并且冒号后面是需要空一格的，
 这个是不能省略的**
 
+
+强制使用pnpm包管理工具
+
+1.创建文件
+在根目录创建`scritps/preinstall.js`文件，添加下面的内容
+
+2.配置命令
+"preinstall": "node ./scripts/preinstall.js"
+
+
+## 项目集成
+集成element-plus
+
+1. 安装
+pnpm install element-plus @element-plus/icons-vue
+
+2. 引入和配置
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css'
+//@ts-ignore忽略当前文件ts类型的检测否则有红色提示(打包会失败)
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+app.use(ElementPlus, {
+locale: zhCn
+})
+
+
+src配置别名
+1. 在vite.config.js文件中配置
+resolve: {
+    alias: {
+    "@": path.resolve("./src") // 相对路径别名配置，使用 @ 代替 src
+    }
+}
+2. TypeScript 编译配置
+// tsconfig.json
+{
+  "compilerOptions": {
+  "baseUrl": "./", // 解析非相对模块的基地址，默认是当前目录
+  "paths": { //路径映射，相对于baseUrl
+  "@/*": ["src/*"]
+  }
+ }
+}
+
+
+环境变量的配置
+开发环境、测试环境、生产环境
+.env.development .env.product .env.test
+
+import.meta.env获取环境变量
+
+配置4SVG图标配置
+svg文件比Img小很多,放在项目中几乎不占用资源
+https://github.com/vbenjs/vite-plugin-svg-icons
+
+1. 安装SVG依赖插件
+pnpm install vite-plugin-svg-icons -D
+
+2. vite.config.ts中配置
+3. 入口文件导入 import 'virtual:svg-icons-register'
 
 
 

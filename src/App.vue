@@ -1,14 +1,19 @@
-<script setup lang="ts">
-for (let i = 0; i < 100; i++) {
-  console.log(i);
-}
-</script>
-
 <template>
   <div>
-    <h1>Hello Vue3</h1>
-    <h1>新增一个h1标题</h1>
+    <SvgIcon name="home" color="red" width="500px" height="500px"></SvgIcon>
   </div>
 </template>
 
-<style scoped></style>
+
+<script setup lang="ts">
+import SvgIcon from "@/components/SvgIcon/index.vue"
+</script>
+
+
+
+<style scoped>
+
+
+
+
+</style>
