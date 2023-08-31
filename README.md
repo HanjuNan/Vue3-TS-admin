@@ -56,7 +56,14 @@ pnpm install -D eslint-plugin-prettier prettier eslint-config-prettier
 
 1.3 在package.json文件中运行脚本
 
+配置husky
+需要利用husky在代码提交之前触发git hook(git在客户端的钩子)，然后执行`pnpm run format`来自动的格式化我们的代码。
 
+1.1 安装husky
+pnpm install -D husky
+
+1.2 执行
+npx husky-init
 
 
 
