@@ -95,7 +95,6 @@ npx husky add .husky/commit-msg
 符合类型的才可以，**需要注意的是类型的后面需要用英文的 :，并且冒号后面是需要空一格的，
 这个是不能省略的**
 
-
 强制使用pnpm包管理工具
 
 1.创建文件
@@ -104,41 +103,40 @@ npx husky add .husky/commit-msg
 2.配置命令
 "preinstall": "node ./scripts/preinstall.js"
 
-
 ## 项目集成
+
 集成element-plus
 
 1. 安装
-pnpm install element-plus @element-plus/icons-vue
+   pnpm install element-plus @element-plus/icons-vue
 
 2. 引入和配置
-import ElementPlus from 'element-plus';
-import 'element-plus/dist/index.css'
-//@ts-ignore忽略当前文件ts类型的检测否则有红色提示(打包会失败)
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-app.use(ElementPlus, {
-locale: zhCn
-})
-
+   import ElementPlus from 'element-plus';
+   import 'element-plus/dist/index.css'
+   //@ts-ignore忽略当前文件ts类型的检测否则有红色提示(打包会失败)
+   import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+   app.use(ElementPlus, {
+   locale: zhCn
+   })
 
 src配置别名
-1. 在vite.config.js文件中配置
-resolve: {
-    alias: {
-    "@": path.resolve("./src") // 相对路径别名配置，使用 @ 代替 src
-    }
-}
-2. TypeScript 编译配置
-// tsconfig.json
-{
-  "compilerOptions": {
-  "baseUrl": "./", // 解析非相对模块的基地址，默认是当前目录
-  "paths": { //路径映射，相对于baseUrl
-  "@/*": ["src/*"]
-  }
- }
-}
 
+1. 在vite.config.js文件中配置
+   resolve: {
+   alias: {
+   "@": path.resolve("./src") // 相对路径别名配置，使用 @ 代替 src
+   }
+   }
+2. TypeScript 编译配置
+   // tsconfig.json
+   {
+   "compilerOptions": {
+   "baseUrl": "./", // 解析非相对模块的基地址，默认是当前目录
+   "paths": { //路径映射，相对于baseUrl
+   "@/_": ["src/_"]
+   }
+   }
+   }
 
 环境变量的配置
 开发环境、测试环境、生产环境
@@ -151,10 +149,84 @@ svg文件比Img小很多,放在项目中几乎不占用资源
 https://github.com/vbenjs/vite-plugin-svg-icons
 
 1. 安装SVG依赖插件
-pnpm install vite-plugin-svg-icons -D
+   pnpm install vite-plugin-svg-icons -D
 
 2. vite.config.ts中配置
 3. 入口文件导入 import 'virtual:svg-icons-register'
+
+
+封装SvgIcon组件,并注册为全局组件
+在@/componnets文件夹下创建一个index.ts文件
+在index.ts中暴露出一个对象,里面有个Install的方法,封装组件全局注册
+并且将暴露的对象在main.ts中使用app.use进行插件注册
+
+
+集成sass
+在组件内使用scss语法,需要加上lang="scss"
+<style scoped lang="scss"></style>
+
+但是你会发现在src/styles/index.scss全局样式文件中没有办法使用$变量.
+因此需要给项目中引入全局变量$.
+
+1.1在styles文件夹下创建一个variable.scss文件！
+1.2在vite.config.ts文件配置
+css: {
+   preprocessorOptions: {
+   scss: {
+   javascriptEnabled: true,
+   additionalData: '@import "./src/styles/variable.scss";',
+   },
+   },
+},
+
+
+mock数据
+1.1 安装
+pnpm install -D vite-plugin-mock mockjs
+
+1.2 在vite.config.js配置文件启用插件
+import { viteMockServe } from 'vite-plugin-mock'
+
+plugins: [
+   vue(),
+   viteMockServe({
+   localEnabled: command === 'serve',
+   }),
+],
+
+1.3 在mock文件夹下,创建user.ts文件用于模型用户信息请求数据
+export default [
+// 用户登录接口
+{
+   url: '/api/user/login',//请求地址
+   method: 'post',//请求方式
+   response: ({ body }) => {
+   //获取请求体携带过来的用户名与密码
+   const { username, password } = body;
+   //调用获取用户信息函数,用于判断是否有此用户
+   const checkUser = createUserList().find(
+   (item) => item.username === username && item.password === password,
+   )
+   //没有用户返回失败信息
+   if (!checkUser) {
+   return { code: 201, data: { message: '账号或者密码不正确' } }
+   }
+   //如果有返回成功信息
+   const { token } = checkUser
+   return { code: 200, data: { token } }
+   },
+   },
+]
+
+
+1.1 安装axios
+pnpm install axios
+
+1.2 axios二次封装
+目的:
+1.使用请求拦截器,可以在请求拦截器中处理一些业务(开始进度条、请求头携带公共参数)
+2.使用响应拦截器,可以在响应拦截器中处理一些业务(进度条结束、简化服务器返回的数据、处理网络错误)
+
 
 
 
